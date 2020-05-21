@@ -1,0 +1,59 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <clocale>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	setlocale(LC_ALL, "RUS");
+	srand(time(NULL));
+	int segments{ 0 };
+	int interval{ 0 };
+	int amount{ 0 };
+	vector<int> v;
+	cout << "Секунда" << "\tКоличество сегментов" << "\t\t\t\tКоличество файлов" << endl;
+	for (int seconds{ 1 }; seconds < 86400; ++seconds)
+	{
+		
+		if (interval == 0)
+		{
+			interval = rand() % 10 + 1;
+			int temp{ rand() % 10 + 1 };
+			segments += temp;
+			if (v.size() == 0)
+				v.push_back(seconds + temp);
+			else
+				v.push_back(temp);
+			++amount;
+			cout << seconds << "\t" << segments;
+			cout << "\t" << "(поступил файл длиной " << temp << " сегментов)\t" <<amount;
+		}
+		else
+			cout << seconds << "\t" << segments;
+		--interval;
+		if (segments != 0)
+			--segments;
+		if (!v.empty())
+		{
+			if (v[0] == seconds)
+			{
+				if (v.size() > 1)
+				{
+					for (int i{ 0 }; i < v.size() - 1; ++i)
+						swap(v[i], v[i + 1]);
+				}
+				v.pop_back();
+				if (v.size() != 0)
+					v[0] += seconds;
+				--amount;
+			}
+		}
+		
+		cout << endl;
+	}
+	cout << "Среднее количество файлов = " << amount / 86400 << endl;
+	return 0;
+}
